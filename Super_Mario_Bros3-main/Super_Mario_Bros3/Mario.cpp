@@ -26,7 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	//vy += MARIO_GRAVITY * dt;
+	/*vy += MARIO_GRAVITY * dt;*/
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -70,7 +70,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
 
-
 		//
 		// Collision logic with other objects
 		//
@@ -87,8 +86,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
-						goomba->SetState(GOOMBA_STATE_DIE);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						goomba->SetState(GOOMBA_STATE_WALKING);
+						//vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
 				/*else if (e->nx != 0)
@@ -136,6 +135,14 @@ void CMario::Render()
 			else if (vx > 0)
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
 			else ani = MARIO_ANI_BIG_WALKING_LEFT;
+			/*if (vy == 0)
+			{
+				if (ny > 0) ani = MARIO_ANI_BIG_IDLE_BOTTOM;
+				else ani = MARIO_ANI_BIG_IDLE_TOP;
+			}
+			else if(vy>0)
+				ani =
+				*/
 		}
 		else if (level == MARIO_LEVEL_SMALL)
 		{
@@ -164,25 +171,46 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_DOWN:
+		if (y >= 240 - 50)
+		{
+			y = 240 - 50;
+			vy = MARIO_WALKING_SPEED;
+		}
 		vy = MARIO_WALKING_SPEED;
 		break;
 	case MARIO_STATE_WALKING_UP:
+		if (y <= 0)
+		{
+			y = 3;
+			vy = -MARIO_WALKING_SPEED;
+		}
 		vy = -MARIO_WALKING_SPEED;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
+		if (x >= 360 - 40)
+		{
+			x = 360 - 40;
+			vx = MARIO_WALKING_SPEED;
+		}
 		vx = MARIO_WALKING_SPEED;
 		nx = 1;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
+		if (x <= 0)
+		{
+			x = 0;
+			vx = -MARIO_WALKING_SPEED;
+		}
 		vx = -MARIO_WALKING_SPEED;
 		nx = -1;
 		break;
-	/*case MARIO_STATE_JUMP:
+	case MARIO_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		vy = -MARIO_JUMP_SPEED_Y;
-		break;*/
+		break;
 	case MARIO_STATE_IDLE:
 		vx = 0;
+		vy = 0;
 		break;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
@@ -217,4 +245,3 @@ void CMario::Reset()
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
-

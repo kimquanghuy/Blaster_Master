@@ -28,19 +28,19 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	y += dy;
 
 	if (vx < 0 && x < 0) {
-		x = 0; vx = 0; vy = GOOMBA_WALKING_SPEED;
+		x = 0; vx = GOOMBA_WALKING_SPEED; vy = -GOOMBA_WALKING_SPEED;
 	}
 
-	if (vx > 0 && x > 150) {
-		x = 150; vy = -GOOMBA_WALKING_SPEED; vx = 0;
+	if (vx > 0 && x > 289) {
+		x = 289; vx = GOOMBA_WALKING_SPEED; vy = GOOMBA_WALKING_SPEED;
 	}
 
 	if (vy < 0 && y < 0) {
-		y = 0; vy = 0; vx = -GOOMBA_WALKING_SPEED;
+		y = 0; vy = GOOMBA_WALKING_SPEED; vx = GOOMBA_WALKING_SPEED;
 	}
 
 	if (vy > 0 && y > 135) {
-		y = 135; vy = 0; vx = GOOMBA_WALKING_SPEED;
+		y = 135; vy = GOOMBA_WALKING_SPEED; vx = -GOOMBA_WALKING_SPEED;
 	}
 }
 
